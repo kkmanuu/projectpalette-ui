@@ -7,6 +7,7 @@ export interface Label {
   color: 'blue' | 'green' | 'orange' | 'purple' | 'red';
 }
 
+
 export interface Card {
   id: string;
   title: string;
