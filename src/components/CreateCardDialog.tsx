@@ -59,6 +59,7 @@ export const CreateCardDialog = ({ listId, open, onOpenChange }: CreateCardDialo
       description: 'Your new card has been added.',
     });
 
+    
     setTitle('');
     setDescription('');
     setPriority('medium');
