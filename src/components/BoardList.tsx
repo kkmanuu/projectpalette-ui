@@ -11,6 +11,7 @@ interface BoardListProps {
   list: List;
 }
 
+
 export const BoardList = ({ list }: BoardListProps) => {
   const [isCreateCardOpen, setIsCreateCardOpen] = useState(false);
   const sortedCards = [...list.cards].sort((a, b) => a.order - b.order);
