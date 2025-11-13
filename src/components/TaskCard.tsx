@@ -19,6 +19,7 @@ const priorityConfig = {
 export const TaskCard = ({ card, isDragging }: TaskCardProps) => {
   const priorityStyle = priorityConfig[card.priority];
 
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
