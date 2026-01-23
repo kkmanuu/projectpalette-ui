@@ -1,10 +1,5 @@
-// React hook for managing component state
 import { useState } from 'react';
-
-// Global state store (Zustand)
 import { useStore } from '@/store/useStore';
-
-// Dialog UI components
 import {
   Dialog,
   DialogContent,
@@ -12,14 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-
-// UI components
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
-// Select (dropdown) components
 import {
   Select,
   SelectContent,
@@ -27,39 +18,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-// Toast notifications
 import { useToast } from '@/hooks/use-toast';
 
-// Props expected by the CreateCardDialog component
 interface CreateCardDialogProps {
-  listId: string;                     // ID of the list to add the card to
-  open: boolean;                      // Controls dialog visibility
-  onOpenChange: (open: boolean) => void; // Callback when dialog opens/closes
+  listId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const CreateCardDialog = ({
-  listId,
-  open,
-  onOpenChange,
-}: CreateCardDialogProps) => {
-  // Local state for card form fields
+export const CreateCardDialog = ({ listId, open, onOpenChange }: CreateCardDialogProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<'high' | 'medium' | 'low'>('medium');
   const [dueDate, setDueDate] = useState('');
-
-  // Add card action from global store
   const addCard = useStore((state) => state.addCard);
-
-  // Toast handler
   const { toast } = useToast();
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate required title field
+    
     if (!title.trim()) {
       toast({
         title: 'Title required',
@@ -69,22 +46,20 @@ export const CreateCardDialog = ({
       return;
     }
 
-    // Create new card with form data
     addCard(listId, {
       title: title.trim(),
       description: description.trim(),
       labels: [],
       priority,
-      dueDate: dueDate || undefined, // Avoid storing empty string
+      dueDate: dueDate || undefined,
     });
 
-    // Show success message
     toast({
       title: 'Card created!',
       description: 'Your new card has been added.',
     });
 
-    // Reset form state and close dialog
+    
     setTitle('');
     setDescription('');
     setPriority('medium');
@@ -93,7 +68,6 @@ export const CreateCardDialog = ({
   };
 
   return (
-    // Dialog container
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -103,9 +77,7 @@ export const CreateCardDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Create card form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Card title */}
           <div className="space-y-2">
             <Label htmlFor="cardTitle">Title</Label>
             <Input
@@ -118,7 +90,6 @@ export const CreateCardDialog = ({
             />
           </div>
 
-          {/* Card description (optional) */}
           <div className="space-y-2">
             <Label htmlFor="description">Description (Optional)</Label>
             <Textarea
@@ -130,15 +101,10 @@ export const CreateCardDialog = ({
             />
           </div>
 
-          {/* Priority and due date */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Priority select */}
             <div className="space-y-2">
               <Label htmlFor="priority">Priority</Label>
-              <Select
-                value={priority}
-                onValueChange={(value) => setPriority(value)}
-              >
+              <Select value={priority} onValueChange={(value: any) => setPriority(value)}>
                 <SelectTrigger id="priority">
                   <SelectValue />
                 </SelectTrigger>
@@ -150,7 +116,6 @@ export const CreateCardDialog = ({
               </Select>
             </div>
 
-            {/* Due date input */}
             <div className="space-y-2">
               <Label htmlFor="dueDate">Due Date</Label>
               <Input
@@ -162,7 +127,6 @@ export const CreateCardDialog = ({
             </div>
           </div>
 
-          {/* Action buttons */}
           <div className="flex justify-end gap-3 pt-4">
             <Button
               type="button"
