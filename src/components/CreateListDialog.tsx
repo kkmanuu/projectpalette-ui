@@ -1,5 +1,10 @@
+// React hook for local component state
 import { useState } from 'react';
+
+// Global store hook (Zustand)
 import { useStore } from '@/store/useStore';
+
+// Dialog UI components
 import {
   Dialog,
   DialogContent,
@@ -7,25 +12,41 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+
+// UI components
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
+// Toast notifications
 import { useToast } from '@/hooks/use-toast';
 
+// Props expected by the CreateListDialog component
 interface CreateListDialogProps {
-  boardId: string;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  boardId: string;                    // ID of the board to add the list to
+  open: boolean;                      // Controls dialog visibility
+  onOpenChange: (open: boolean) => void; // Callback when dialog opens/closes
 }
 
-export const CreateListDialog = ({ boardId, open, onOpenChange }: CreateListDialogProps) => {
+export const CreateListDialog = ({
+  boardId,
+  open,
+  onOpenChange,
+}: CreateListDialogProps) => {
+  // State for the list title input
   const [title, setTitle] = useState('');
+
+  // Add list action from global store
   const addList = useStore((state) => state.addList);
+
+  // Toast handler
   const { toast } = useToast();
 
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Validate that the title is not empty or whitespace
     if (!title.trim()) {
       toast({
         title: 'Title required',
@@ -35,18 +56,22 @@ export const CreateListDialog = ({ boardId, open, onOpenChange }: CreateListDial
       return;
     }
 
+    // Create the new list
     addList(boardId, title.trim());
 
+    // Show success message
     toast({
       title: 'List created!',
       description: 'Your new list is ready.',
     });
 
+    // Reset form and close dialog
     setTitle('');
     onOpenChange(false);
   };
 
   return (
+    // Dialog container
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -56,7 +81,9 @@ export const CreateListDialog = ({ boardId, open, onOpenChange }: CreateListDial
           </DialogDescription>
         </DialogHeader>
 
+        {/* Create list form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* List title input */}
           <div className="space-y-2">
             <Label htmlFor="listTitle">List Title</Label>
             <Input
@@ -69,6 +96,7 @@ export const CreateListDialog = ({ boardId, open, onOpenChange }: CreateListDial
             />
           </div>
 
+          {/* Action buttons */}
           <div className="flex justify-end gap-3 pt-4">
             <Button
               type="button"
@@ -84,4 +112,3 @@ export const CreateListDialog = ({ boardId, open, onOpenChange }: CreateListDial
     </Dialog>
   );
 };
-
